@@ -1,49 +1,64 @@
 package ar.edu.unahur.obj2.profugos;
 
-public class Profugo implements IProfugo{
-    private Integer inocencia;
-    private Integer habilidad;
-    private Boolean nervioso;
+public abstract class Profugo implements IProfugo{
+    private Integer nivelDeInocencia;
+    private Integer nivelDeHabilidad;
+    private Boolean esNervioso;
 
-    public Profugo(Integer inocencia, Integer habilidad) {
-        this.inocencia = inocencia;
-        this.habilidad = habilidad;
-        this.nervioso = false;
+    public Profugo(Integer nivelDeInocencia, Integer nivelDeHabilidad, Boolean esNervioso) {
+        this.nivelDeInocencia = nivelDeInocencia;
+        this.nivelDeHabilidad = nivelDeHabilidad;
+        this.esNervioso = esNervioso;
     }
 
     @Override
+    public String toString() {
+        return "Inocencia: " + nivelDeInocencia +
+               " | Habilidad: " + nivelDeHabilidad +
+               " | Nervioso: " + esNervioso;
+    }
+
+
+    @Override
     public Integer getInocencia() {
-        return inocencia;
+        return nivelDeInocencia;
     }
 
     @Override
     public Integer getHabilidad() {
-        return habilidad;
+        return nivelDeHabilidad;
     }
 
     @Override
     public Boolean esNervioso() {
-        return nervioso;
+        return esNervioso;
     }
 
     @Override
-    public void volverseNervioso() {
-        this.nervioso = true;
+    public void seIntimida() {
+        this.nivelDeInocencia = Math.max(0, this.nivelDeInocencia - 2);
     }
 
     @Override
     public void dejarDeEstarNervioso() {
-       this.nervioso = false;
+        this.esNervioso = false;
     }
 
     @Override
     public void reducirHabilidad() {
-        this.habilidad--;
+        this.nivelDeHabilidad = Math.max(0, this.nivelDeHabilidad -5);
+        
     }
 
     @Override
-    public void disminuirInocencia() {
-      this.inocencia--;
+    public void volverseNervioso() {
+        this.esNervioso = true;
     }
+
+
+
+
+
+
 
 }

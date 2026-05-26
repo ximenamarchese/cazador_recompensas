@@ -1,34 +1,53 @@
 package ar.edu.unahur.obj2.cazadores;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import ar.edu.unahur.obj2.profugos.IProfugo;
 import ar.edu.unahur.obj2.zonas.Zona;
 
-//Aplico template method para los cazadores
 public abstract class Cazador {
-    private Double experiencia = 0.0;
+    protected Integer experiencia = 0;
+    private List<IProfugo> profugosCapturados = new ArrayList<>();
+    private List<IProfugo> profugosIntimidados = new ArrayList<>();
 
-    public final void cazar(Zona zona){
-        for (IProfugo profugo : zona.getProfugos()) {
-            if (puedeCapturar(profugo)) {
-                System.out.println("Capturado");
-            } else {
-                intimidar(profugo);
+    public Cazador(Integer experiencia) {}
+
+    public List<IProfugo> getProfugosCapturados() {
+        return profugosCapturados;
+    }
+
+    public void cazarProfugo(Zona zona){
+        zona.getProfugos().stream().forEach(unProfugo -> {
+            if(sePuedeCazar(unProfugo)) {
+                zona.profugoCapturado(unProfugo);
+                capturarAlProfugo(unProfugo);
+                this.experiencia = profugosIntimidados.stream().min(Comparator.comparing(p -> p.getHabilidad())).get().getHabilidad() +  2 * profugosCapturados.size();
             }
-        }
+            else {
+                intimidar(unProfugo);
+            }
+        });
+
     }
 
-    public final Boolean puedeCapturar(IProfugo profugo) {
-        return experiencia > profugo.getInocencia()
-              && cumpleCondicion(profugo);
+    protected Boolean sePuedeCazar(IProfugo unProfugo) {
+        return Boolean.valueOf(unProfugo.getInocencia() < this.experiencia) && condicionEspecifica(unProfugo);
     }
 
-    public abstract Boolean cumpleCondicion(IProfugo profugo);
+    protected abstract Boolean condicionEspecifica(IProfugo unProfugo);
+    protected abstract void intimidacionEspecifica(IProfugo unProfugo);
 
-    public void intimidar(IProfugo profugo) {
-        profugo.disminuirInocencia();
+    protected void intimidar(IProfugo unProfugo){
+        unProfugo.seIntimida(); 
+        intimidacionEspecifica(unProfugo);
+        profugosIntimidados.add(unProfugo);
     }
 
-    public Double getExperiencia() {
-        return this.experiencia;
-    };   
-    
+    protected void capturarAlProfugo(IProfugo unProfugo){
+        profugosCapturados.add(unProfugo);
+    }
+
+
+
 }

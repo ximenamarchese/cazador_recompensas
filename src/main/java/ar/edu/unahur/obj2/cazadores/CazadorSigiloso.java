@@ -1,16 +1,12 @@
 package ar.edu.unahur.obj2.cazadores;
 
-import ar.edu.unahur.obj2.zonas.Zona;
+import ar.edu.unahur.obj2.profugos.IProfugo;
 
 public class CazadorSigiloso extends Cazador {
 
     @Override
-    protected void cazar(Zona zona){
-        if (this.getExperiencia() > pito)
-
-    }; 
-
-
-    public void intimidarProfugoEnZona(Zona zona){};
+    protected Boolean condicionEspecifica(IProfugo unProfugo) {
+        return unProfugo.getHabilidad() < 50;
+    }
 
 }
